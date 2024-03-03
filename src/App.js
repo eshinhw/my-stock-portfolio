@@ -5,16 +5,17 @@ import Setting from "./Setting";
 import AddStock from "./AddStock";
 import Portfolio from "./Portfolio";
 import Stats from "./Stats";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const [balance, setBalance] = useState(0);
-  const [timePeriod, setTimePeriod] = useState(1);
+  const [balance, setBalance] = useState(10000);
+  const [startYear, setStartYear] = useState(2000);
+  const [endYear, setEndYear] = useState(new Date().getFullYear());
   const [stocks, setStocks] = useState([]);
   const [newStock, setNewStock] = useState("");
+  const [weight, setWeight] = useState();
+  const [totalWeight, setTotalWeight] = useState(0);
   const [showPerf, setShowPerf] = useState(false);
-  useEffect(() => {
-    setShowPerf(false);
-  }, []);
 
   return (
     <body className="m-0">
@@ -22,16 +23,27 @@ function App() {
       <Setting
         balance={balance}
         setBalance={setBalance}
-        timePeriod={timePeriod}
-        setTimePeriod={setTimePeriod}
+        startYear={startYear}
+        setStartYear={setStartYear}
+        endYear={endYear}
+        setEndYear={setEndYear}
       />
       <AddStock
         stocks={stocks}
         setStocks={setStocks}
         newStock={newStock}
         setNewStock={setNewStock}
+        weight={weight}
+        setWeight={setWeight}
+        totalWeight={totalWeight}
+        setTotalWeight={setTotalWeight}
       />
-      <Portfolio stocks={stocks} setShowPerf={setShowPerf} />
+      <Portfolio
+        stocks={stocks}
+        setShowPerf={setShowPerf}
+        showPerf={showPerf}
+        totalWeight={totalWeight}
+      />
       <Stats showPerf={showPerf} />
     </body>
   );
