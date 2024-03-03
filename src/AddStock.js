@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
-import Table from "react-bootstrap/Table";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Typeahead } from "react-bootstrap-typeahead";
+import SP500 from "./sp500_symbols.json";
 
 function AddStock({
   stocks,
@@ -16,14 +18,12 @@ function AddStock({
   totalWeight,
   setTotalWeight,
 }) {
+  // const [selectedOption, setSelectedOption] = useState([]);
   function handleOnSubmit(e) {
     e.preventDefault();
-    if (newStock === "") {
-      toast.error("Please provide ticker symbol");
-      setWeight(0);
-      return;
-    }
-    if (weight <= 0 || weight > 100) {
+    const newSymbol = newStock[0];
+
+    if (weight <= 0 || weight > 100 || typeof weight !== "number") {
       toast.error("Weight must be between 1 and 100");
       setWeight(0);
       return;
@@ -34,9 +34,10 @@ function AddStock({
       setWeight(0);
       return;
     }
+    setStocks([...stocks, { symbol: newSymbol, weight: weight }]);
     setTotalWeight(Number(totalWeight) + Number(weight));
-    setStocks([...stocks, { symbol: newStock, weight: weight }]);
-    setNewStock("");
+    // setStocks([...stocks, { symbol: newStock, weight: weight }]);
+    setNewStock([]);
     setWeight(0);
   }
 
@@ -51,18 +52,22 @@ function AddStock({
         {/* Right Column */}
         <div className="mr-44">
           <Form className="grid grid-cols-3 my-auto" onSubmit={handleOnSubmit}>
-            <InputGroup className="mb-3 h-full">
-              <Form.Control
-                placeholder="Stock Symbol"
-                value={newStock}
-                onChange={(e) => setNewStock(e.target.value)}
-              />
-            </InputGroup>
+            <Typeahead
+              id="symbol-input"
+              className="mb-3 h-full"
+              placeholder="Stock Symbol"
+              labelKey="label"
+              options={SP500}
+              selected={newStock}
+              // onChange={(selected) => setSelectedOption(selected)}
+              onChange={(symbol) => setNewStock(symbol)}
+            />
             <InputGroup className="ml-2 mb-3 h-full">
               <Form.Control
                 placeholder="Weight"
                 value={weight}
-                onChange={(e) => setWeight(e.target.value)}
+                onChange={(e) => setWeight(Number(e.target.value))}
+                type="number"
               />
               <InputGroup.Text>%</InputGroup.Text>
             </InputGroup>
