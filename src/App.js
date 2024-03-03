@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Navbar from "./Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Setting from "./Setting";
@@ -13,12 +13,12 @@ function App() {
   const [endYear, setEndYear] = useState(new Date().getFullYear());
   const [stocks, setStocks] = useState([]);
   const [newStock, setNewStock] = useState("");
-  const [weight, setWeight] = useState();
+  const [weight, setWeight] = useState(null);
   const [totalWeight, setTotalWeight] = useState(0);
   const [showPerf, setShowPerf] = useState(false);
 
   return (
-    <body className="m-0">
+    <div className="m-0">
       <Navbar />
       <Setting
         balance={balance}
@@ -44,8 +44,8 @@ function App() {
         showPerf={showPerf}
         totalWeight={totalWeight}
       />
-      <Stats showPerf={showPerf} />
-    </body>
+      <Stats showPerf={showPerf} startYear={startYear} endYear={endYear} />
+    </div>
   );
 }
 
