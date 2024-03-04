@@ -1,11 +1,13 @@
 import { useState } from "react";
 import Navbar from "./Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Setting from "./Setting";
+
 import AddStock from "./AddStock";
 import Portfolio from "./Portfolio";
 import Stats from "./Stats";
 import "react-toastify/dist/ReactToastify.css";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
 
 function App() {
   const [balance, setBalance] = useState(10000);
@@ -20,14 +22,38 @@ function App() {
   return (
     <div className="m-0">
       <Navbar />
-      <Setting
-        balance={balance}
-        setBalance={setBalance}
-        startYear={startYear}
-        setStartYear={setStartYear}
-        endYear={endYear}
-        setEndYear={setEndYear}
-      />
+      <div className="grid grid-cols-2 my-10">
+        {/* Left Column */}
+        <div className="mx-44">
+          <span className="text-2xl font-bold">Portfolio Configuration</span>
+        </div>
+        {/* Right Column */}
+        <div className="mr-44">
+          <div className="flex flex-col gap-2">
+            <InputGroup className="">
+              <InputGroup.Text>Account Balance ($)</InputGroup.Text>
+              <Form.Control
+                value={balance}
+                onChange={(e) => setBalance(e.target.value)}
+              />
+            </InputGroup>
+            <InputGroup className="">
+              <InputGroup.Text>Start Year</InputGroup.Text>
+              <Form.Control
+                value={startYear}
+                onChange={(e) => setStartYear(e.target.value)}
+              />
+            </InputGroup>
+            <InputGroup className="">
+              <InputGroup.Text>End Year</InputGroup.Text>
+              <Form.Control
+                value={endYear}
+                onChange={(e) => setEndYear(e.target.value)}
+              />
+            </InputGroup>
+          </div>
+        </div>
+      </div>
       <AddStock
         stocks={stocks}
         setStocks={setStocks}
