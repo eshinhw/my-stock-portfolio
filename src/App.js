@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+
 import Navbar from "./Navbar";
 
 import Form from "react-bootstrap/Form";
@@ -6,7 +7,6 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import { ToastContainer, toast } from "react-toastify";
 
-import { Typeahead } from "react-bootstrap-typeahead";
 import SP500 from "./json/sp500_symbols.json";
 import Table from "react-bootstrap/Table";
 
@@ -15,65 +15,98 @@ import generateYears from "./years";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 
+import { SlMagnifier } from "react-icons/sl";
+
+const ASSETS = [
+  {
+    id: 1,
+    symbol: "",
+    weight: null,
+  },
+  {
+    id: 2,
+    symbol: "",
+    weight: null,
+  },
+  {
+    id: 3,
+    symbol: "",
+    weight: null,
+  },
+  {
+    id: 4,
+    symbol: "",
+    weight: null,
+  },
+  {
+    id: 5,
+    symbol: "",
+    weight: null,
+  },
+];
+
 function App() {
   const [balance, setBalance] = useState(10000);
   const [startYear, setStartYear] = useState(2000);
   const [endYear, setEndYear] = useState(new Date().getFullYear());
-  const [stocks, setStocks] = useState([]);
-  const [weight, setWeight] = useState(null);
-  const [totalWeight, setTotalWeight] = useState(0);
+
+  const [assets, setAssets] = useState(ASSETS);
+  const [totalWeight, setTotalWeight] = useState();
+
   const [showPerf, setShowPerf] = useState(false);
 
-  // async function retrieveStockName(symbol) {
-  //   const resp = await fetch(`http://127.0.0.1:8000/msp/stocks/${symbol}`);
-  //   if (!resp.ok) {
-  //     throw new Error("Network error!");
-  //   }
+  function handleAssetSymbol(e, id) {
+    let result = [...assets];
+    result = result.map((x) => {
+      if (x.id === id) x.symbol = e.target.value;
+      return x;
+    });
+    setAssets(result);
+  }
 
-  //   const data = await resp.json();
-  //   return data["name"];
-  // }
+  function handleAssetWeight(e, id) {
+    let result = [...assets];
+    result = result.map((x) => {
+      if (x.id === id) x.weight = e.target.value;
+      return x;
+    });
+    setTotalWeight(totalWeight + e.target.value);
+    setAssets(result);
+  }
 
-  // function handleOnSubmit(e) {
-  //   e.preventDefault();
-  //   const newSymbol = newStock[0];
+  function handleTotalWeight() {
+    const totalWeight = ASSETS.reduce((n, { weight }) => n + Number(weight), 0);
+    setTotalWeight(totalWeight);
+  }
 
-  //   if (weight <= 0 || weight > 100 || typeof weight !== "number") {
-  //     toast.error("Weight must be between 1 and 100");
-  //     setWeight(0);
-  //     return;
-  //   }
+  function handleAnalyzePortfolioSubmit() {
+    // Input Validation: Provide both symbol and corresponding weight
+    for (var i = 0; i < assets.length; i++) {
+      let currAsset = assets[i];
+      if (currAsset.symbol !== "" && currAsset.weight === null) {
+        toast.error("Provide corresponding weight.");
+        break;
+      } else if (currAsset.symbol === "" && currAsset.weight !== null) {
+        toast.error("Provide corresponding ticker symbol.");
+        break;
+      } else if (currAsset.symbol !== "" && !SP500.includes(currAsset.symbol)) {
+        toast.error("Provided ticker symbol is not in S&P500.");
+        break;
+      }
+    }
 
-  //   if (Number(totalWeight) + Number(weight) > 100) {
-  //     toast.error("Total Weight can't be greater than 100");
-  //     setWeight(0);
-  //     return;
-  //   }
+    if (totalWeight !== 100) {
+      toast.error("Total weight must be equal to 100%.");
+      return;
+    } else {
+      toast.success("Good!");
+      setShowPerf(true);
+    }
+  }
 
-  //   retrieveStockName(newSymbol).then((name) =>
-  //     setStocks([...stocks, { symbol: newSymbol, name: name, weight: weight }])
-  //   );
-  //   setTotalWeight(Number(totalWeight) + Number(weight));
-  //   setNewStock([]);
-  //   setWeight(0);
-  // }
-
-  // async function fetchData() {
-  //   const resp = await fetch(`http://127.0.0.1:8000/msp/stats/${stocks}`);
-  //   if (!resp.ok) {
-  //     throw new Error("Fetch failed");
-  //   }
-
-  //   const data = await resp.json();
-  //   return data;
-  // }
-
-  // useEffect(() => {
-  //   console.log(stocks);
-  //   if (stocks.length > 0) {
-  //     fetchData().then((data) => console.log(data));
-  //   }
-  // });
+  useEffect(() => {
+    handleTotalWeight();
+  }, [assets]);
 
   return (
     <main className="m-0">
@@ -82,7 +115,7 @@ function App() {
       <section className="mx-44">
         {/* Heading */}
         <div className="my-10">
-          <p className="text-2xl font-bold ">Portfolio Configuration</p>
+          <p className="text-2xl font-bold ">Account Configuration</p>
         </div>
         {/* Configuration Setting */}
         <div className="my-10">
@@ -103,7 +136,10 @@ function App() {
             <div className="flex justify-between align-middle">
               <p className="font-bold text-lg">Start Year</p>
               <div className="w-64">
-                <Form.Select aria-label="Default select example">
+                <Form.Select
+                  aria-label="Default select example"
+                  onChange={(e) => setStartYear(e.target.value)}
+                >
                   {generateYears().map((year) => (
                     <option value={year}>{year}</option>
                   ))}
@@ -116,6 +152,7 @@ function App() {
                 <Form.Select
                   aria-label="Default select example"
                   defaultValue={new Date().getFullYear()}
+                  onChange={(e) => setEndYear(e.target.value)}
                 >
                   {generateYears().map((year) => (
                     <option value={year}>{year}</option>
@@ -130,7 +167,7 @@ function App() {
       {/* Stock Portfolio */}
       <section className="mx-44">
         <div className="my-6">
-          <span className="text-2xl font-bold">Portfolio</span>
+          <span className="text-2xl font-bold">Portfolio Construction</span>
         </div>
         <Table bordered>
           <thead>
@@ -140,26 +177,27 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {Array.from({ length: 5 }, (_, i) => i + 1).map((num) => (
+            {ASSETS.map((asset) => (
               <tr>
                 <td>
                   <div className="flex justify-between">
-                    <p className="my-1">Asset {num}</p>
-                    <Typeahead
-                      id="symbol-input"
-                      className="my-1 h-full"
-                      placeholder="Ticker Symbol"
-                      labelKey="label"
-                      options={SP500}
-                      // onChange={(selected) => setSelectedOption(selected)}
-                    />
+                    <p className="my-1">Asset {asset.id}</p>
+
+                    <InputGroup className="my-1 h-full w-2/5">
+                      <Form.Control
+                        placeholder="Ticker Symbol"
+                        onChange={(e) => handleAssetSymbol(e, asset.id)}
+                      />
+                      <InputGroup.Text>
+                        <SlMagnifier />
+                      </InputGroup.Text>
+                    </InputGroup>
                   </div>
                 </td>
                 <td>
                   <InputGroup className="my-1 h-full">
                     <Form.Control
-                      value={weight}
-                      onChange={(e) => setWeight(Number(e.target.value))}
+                      onChange={(e) => handleAssetWeight(e, asset.id)}
                     />
                     <InputGroup.Text>%</InputGroup.Text>
                   </InputGroup>
@@ -172,7 +210,7 @@ function App() {
               <th>Total</th>
               <th>
                 <InputGroup className="my-1 h-full">
-                  <Form.Control disabled value={weight} />
+                  <Form.Control disabled value={totalWeight} />
                   <InputGroup.Text>%</InputGroup.Text>
                 </InputGroup>
               </th>
@@ -183,12 +221,13 @@ function App() {
           <Button
             variant="primary"
             className="bg-black border-black px-10 h-16 w-72 mt-1 mb-10"
-            onClick={() => setShowPerf(!showPerf)}
+            onClick={handleAnalyzePortfolioSubmit}
           >
             Analyze Portfolio
           </Button>
         </div>
       </section>
+
       {/* Performance */}
       <section>
         {showPerf && (
@@ -199,6 +238,8 @@ function App() {
           </div>
         )}
       </section>
+
+      <ToastContainer />
     </main>
   );
 }
