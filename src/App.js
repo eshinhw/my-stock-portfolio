@@ -47,7 +47,7 @@ const ASSETS = [
 
 function App() {
   const [balance, setBalance] = useState(10000);
-  const [startYear, setStartYear] = useState(2000);
+  const [startYear, setStartYear] = useState(1980);
   const [endYear, setEndYear] = useState(new Date().getFullYear());
 
   const [assets, setAssets] = useState(ASSETS);
@@ -83,13 +83,14 @@ function App() {
     // Input Validation: Provide both symbol and corresponding weight
     for (var i = 0; i < assets.length; i++) {
       let currAsset = assets[i];
-      if (currAsset.symbol !== "" && currAsset.weight === null) {
+      let currSymbol = currAsset.symbol.toUpperCase();
+      if (currSymbol !== "" && currAsset.weight === null) {
         toast.error("Provide corresponding weight.");
         break;
-      } else if (currAsset.symbol === "" && currAsset.weight !== null) {
+      } else if (currSymbol === "" && currAsset.weight !== null) {
         toast.error("Provide corresponding ticker symbol.");
         break;
-      } else if (currAsset.symbol !== "" && !SP500.includes(currAsset.symbol)) {
+      } else if (currSymbol !== "" && !SP500.includes(currSymbol)) {
         toast.error("Provided ticker symbol is not in S&P500.");
         break;
       }
@@ -139,6 +140,7 @@ function App() {
                 <Form.Select
                   aria-label="Default select example"
                   onChange={(e) => setStartYear(e.target.value)}
+                  defaultValue={1980}
                 >
                   {generateYears().map((year) => (
                     <option value={year}>{year}</option>
