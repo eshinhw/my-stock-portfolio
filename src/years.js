@@ -1,5 +1,3 @@
-import React from "react";
-
 function generateYears(startYear) {
   var currentYear = new Date().getFullYear(),
     years = [];
