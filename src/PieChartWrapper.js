@@ -2,16 +2,30 @@ import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 
 function PieChartWrapper({ assets }) {
-  const [data, setData] = useState([]);
+  // let filteredAssets = assets.filter((asset) => asset.weight > 0);
+  // let myAssets = [];
+
+  // for (let i = 0; i < filteredAssets.length; i++) {
+  //   const { symbol, weight } = filteredAssets[i];
+  //   console.log(symbol);
+  //   console.log(weight);
+  //   myAssets.push([symbol.toUpperCase(), weight]);
+  // }
+
+  const [data, setData] = useState([["Symbol", "Weight"]]);
 
   useEffect(() => {
     let filteredAssets = assets.filter((asset) => asset.weight > 0);
+    let myAssets = [];
+
     for (let i = 0; i < filteredAssets.length; i++) {
-      setData((data) => [
-        ...data,
-        [filteredAssets[i].symbol.toUpperCase(), filteredAssets[i].weight],
-      ]);
+      const { symbol, weight } = filteredAssets[i];
+      console.log(symbol);
+      console.log(weight);
+      myAssets.push([symbol.toUpperCase(), Number(weight)]);
     }
+    setData([...data, ...myAssets]);
+    console.log(data);
   }, []);
 
   const options = {
@@ -19,13 +33,16 @@ function PieChartWrapper({ assets }) {
     is3D: true,
   };
   return (
-    <Chart
-      chartType="PieChart"
-      width="100%"
-      height="250px"
-      data={data}
-      options={options}
-    />
+    <>
+      <p>{data}</p>
+      <Chart
+        chartType="PieChart"
+        width="100%"
+        height="250px"
+        data={data}
+        options={options}
+      />
+    </>
   );
 }
 
