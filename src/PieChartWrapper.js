@@ -21,7 +21,6 @@ function PieChartWrapper({ assets }) {
   };
   return (
     <>
-      <p>{data}</p>
       <Chart
         chartType="PieChart"
         width="100%"
