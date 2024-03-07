@@ -2,16 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 
 function PieChartWrapper({ assets }) {
-  // let filteredAssets = assets.filter((asset) => asset.weight > 0);
-  // let myAssets = [];
-
-  // for (let i = 0; i < filteredAssets.length; i++) {
-  //   const { symbol, weight } = filteredAssets[i];
-  //   console.log(symbol);
-  //   console.log(weight);
-  //   myAssets.push([symbol.toUpperCase(), weight]);
-  // }
-
   const [data, setData] = useState([["Symbol", "Weight"]]);
 
   useEffect(() => {
@@ -20,12 +10,9 @@ function PieChartWrapper({ assets }) {
 
     for (let i = 0; i < filteredAssets.length; i++) {
       const { symbol, weight } = filteredAssets[i];
-      console.log(symbol);
-      console.log(weight);
       myAssets.push([symbol.toUpperCase(), Number(weight)]);
     }
     setData([...data, ...myAssets]);
-    console.log(data);
   }, []);
 
   const options = {
