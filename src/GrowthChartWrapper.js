@@ -1,20 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 
-function GrowthChartWrapper() {
-  const data = [
-    ["Date", "PV"],
-    ["2013", 1000],
-    ["2014", 1170],
-    ["2015", 660],
-    ["2016", 1030],
-  ];
+function GrowthChartWrapper(props) {
+  const [data, setData] = useState([["Date", "PV"]]);
+  // const data = [
+  //   ["Date", "PV"],
+  //   ["2013", 1000],
+  //   ["2014", 1170],
+  //   ["2015", 660],
+  //   ["2016", 1030],
+  // ];
+
+  useEffect(() => {
+    const assets = props.assets.filter((asset) => asset.weight > 0);
+    console.log(assets);
+
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        initialBalance: props.balance,
+        startYear: props.startYear,
+        endYear: props.endYear,
+        assets: assets,
+      }),
+    };
+    fetch("http://127.0.0.1:8000/msp/portfolio-growth", requestOptions)
+      .then((response) => response.json())
+      .then((gdata) => {
+        let myData = [];
+        const parsed = JSON.parse(gdata.data);
+        for (const key in parsed) {
+          let currDate = new Date(Number(key));
+          myData.push([currDate, parsed[key]]);
+        }
+        setData([...data, ...myData]);
+      });
+  }, []);
 
   const options = {
-    title: "Company Performance",
-    hAxis: { title: "Year", titleTextStyle: { color: "#333" } },
-    vAxis: { minValue: 0 },
-    chartArea: { width: "50%", height: "70%" },
+    title: "Portfolio Growth",
+    chartArea: { width: "80%", height: "70%" },
   };
 
   return (

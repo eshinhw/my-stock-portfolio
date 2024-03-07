@@ -82,8 +82,8 @@ function App() {
   const [cagr, setCagr] = useState(0);
   const [portVol, setPortVol] = useState(0);
   const [sharpe, setSharpe] = useState(0);
-  const [drawdown, setDrawdown] = useState(null);
-  const [growth, setGrowth] = useState(null);
+  const [drawdown, setDrawdown] = useState({});
+  const [growth, setGrowth] = useState({});
 
   function handleAssetSymbol(e, id) {
     let result = [...assets];
@@ -200,8 +200,10 @@ function App() {
                     onChange={(e) => setStartYear(e.target.value)}
                     defaultValue={1980}
                   >
-                    {generateYears().map((year) => (
-                      <option value={year}>{year}</option>
+                    {generateYears().map((year, idx) => (
+                      <option value={year} key={idx}>
+                        {year}
+                      </option>
                     ))}
                   </Form.Select>
                 </div>
@@ -214,8 +216,10 @@ function App() {
                     defaultValue={new Date().getFullYear()}
                     onChange={(e) => setEndYear(e.target.value)}
                   >
-                    {generateYears().map((year) => (
-                      <option value={year}>{year}</option>
+                    {generateYears().map((year, idx) => (
+                      <option value={year} key={idx}>
+                        {year}
+                      </option>
                     ))}
                   </Form.Select>
                 </div>
@@ -367,7 +371,12 @@ function App() {
           </div>
           <div>
             <span className="text-xl font-bold">Portfolio Growth</span>
-            <GrowthChartWrapper />
+            <GrowthChartWrapper
+              assets={assets}
+              startYear={startYear}
+              endYear={endYear}
+              balance={balance}
+            />
           </div>
           <div>
             <span className="text-xl font-bold">Portfolio Drawdowns</span>
