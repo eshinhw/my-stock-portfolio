@@ -39,7 +39,6 @@ function GrowthChartWrapper(props) {
   }, []);
 
   const options = {
-    title: "Portfolio Growth",
     chartArea: { width: "80%", height: "70%" },
   };
 

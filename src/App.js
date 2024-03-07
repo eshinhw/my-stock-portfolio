@@ -380,7 +380,12 @@ function App() {
           </div>
           <div>
             <span className="text-xl font-bold">Portfolio Drawdowns</span>
-            <DrawdownChartWrapper />
+            <DrawdownChartWrapper
+              assets={assets}
+              startYear={startYear}
+              endYear={endYear}
+              balance={balance}
+            />
           </div>
         </section>
       )}
