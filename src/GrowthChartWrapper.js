@@ -40,6 +40,7 @@ function GrowthChartWrapper(props) {
 
   const options = {
     chartArea: { width: "80%", height: "70%" },
+    legend: "none",
   };
 
   return (
