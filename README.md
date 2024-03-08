@@ -32,6 +32,8 @@ git clone https://github.com/eshinhw/my-stock-portfolio-server
 
 Then, you can follow the instructions to start the server.
 
+For the demo, you must use Chrome Web Browser to get the correct analysis results.
+
 ## Available Scripts
 
 In the project directory, you can run:
