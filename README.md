@@ -1,14 +1,36 @@
-# Create React App
+# My Stock Portfolio
 
-This directory is a brief example of a [Create React App](https://github.com/facebook/create-react-app) site that can be deployed to Vercel with zero configuration.
+<div align="center">
 
-## Deploy Your Own
+  ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/eshinhw/motivation-dash)
+  ![GitHub issues](https://img.shields.io/github/issues/eshinhw/motivation-dash)
+  ![GitHub pull requests](https://img.shields.io/github/issues-pr/eshinhw/motivation-dash)
+  
+</div>
 
-Deploy your own Create React App project with Vercel.
+## Objectives
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/vercel/tree/main/examples/create-react-app&template=create-react-app)
+### Performance Evaluation
 
-_Live Example: https://create-react-template.vercel.app/_
+My Stock Portfolio helps assess the historical performance of a portfolio or investment strategy by simulating how it would have performed in the past. This allows investors to gauge the effectiveness of their strategies and make informed decisions based on historical data.
+
+### Risk Assessment
+
+My Stock Portfolio helps in analyzing the risk associated with a particular investment strategy. It allows users to understand the potential drawdowns, volatility, and other risk metrics associated with the portfolio.
+
+### Drawdown Analysis
+
+Examining historical drawdowns (peak-to-trough declines) helps investors assess the resilience of their portfolios during challenging market conditions. My Stock Portfolio allows users to identify and understand the magnitude and duration of drawdowns.
+
+## How to Start
+
+My Stock Portfolio can be accessed by visiting https://my-stock-portfolio.vercel.app for client side. However, for full analysis functionality, the server must be running in the back. You can run the server by cloning the following repository.
+
+```
+git clone https://github.com/eshinhw/my-stock-portfolio-server
+```
+
+Then, you can follow the instructions to start the server.
 
 ## Available Scripts
 
